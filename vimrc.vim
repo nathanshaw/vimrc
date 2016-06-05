@@ -6,7 +6,7 @@ execute pathogen#infect()
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Sets how many lines of history VIM has to remember
-set history=700
+set history=2000
 
 " Enable filetype plugins
 filetype plugin on
@@ -53,6 +53,7 @@ endif
 "Always show current position
 set ruler
 
+
 " Height of the command bar
 set cmdheight=3
 
@@ -70,9 +71,6 @@ endif
 
 " Ignore case when searching
 set ignorecase
-
-" When searching try to be smart about cases 
-" set smartcase
 
 " Highlight search results
 set hlsearch
@@ -124,14 +122,6 @@ set encoding=utf8
 
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Files, backups and undo
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Turn backup off, since most stuff is in SVN, git et.c anyway...
-set nobackup
-set nowb
-set noswapfile
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
@@ -230,8 +220,22 @@ set viminfo^=%
 set laststatus=2
 
 " Format the status line
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
+" set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
+" adds note if there is paste available
+set statusline=\ %{HasPaste()}
+" something
+set statusline+=%F%m%r%h
+" just adds white space?
+set statusline+=\ %w\ \ 
+" the current working directory
+set statusline+=CWD:\ %r%{getcwd()}%h\
 
+" switch over to the right side
+set statusline+=%=
+" the current column number and line number
+set statusline+=\ Line:\ %l
+set statusline+=\ TotalLines:\ %L
+set statusline+=\ Column:\ %c
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Editing mappings
@@ -393,7 +397,7 @@ set relativenumber
 set number
 
 " show whitespace characters
-set list
+" set list
 " set listchars=...
 "
 " -------- PYTHON ----------------
@@ -450,7 +454,7 @@ autocmd! bufwritepost vimrc source ~/.vim_runtime/my_configs.vim
 "    means that you can undo even when you close a buffer/VIM
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 try
-    set undodir=~/.vim_runtime/temp_dirs/undodir
+    set undodir=~/.custom_vimrc/temp_dirs/undo_dir
     set undofile
 catch
 endtry
