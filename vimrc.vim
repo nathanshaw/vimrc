@@ -1,16 +1,25 @@
 "For dealing with pathogen
 
 execute pathogen#infect()
+syntax on
+filetype on
+" Enable filetype plugins
+filetype plugin on
+filetype indent on
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Sets how many lines of history VIM has to remember
-set history=2000
+au BufNewFile,BufRead *.ck set filetype=ck syntax=ck
+au BufNewFile,BufRead *.ino set filetype=ino syntax=ino
+au BufNewFile,BufRead *.json set filetype=json syntax=json
+au BufNewFile,BufRead *.yml set filetype=yaml syntax=yaml
+au BufNewFile,BufRead *.py set filetype=python syntax=python
 
-" Enable filetype plugins
-filetype plugin on
-filetype indent on
+set runtimepath+=~/.custom_vimrc
+
+" Sets how many lines of history VIM has to remember
+set history=300
 
 " Set to auto read when a file is changed from the outside
 set autoread
@@ -39,9 +48,6 @@ set langmenu=en
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 
-" Turn on the WiLd menu
-" set wildmenu
-
 " Ignore compiled files
 set wildignore=*.o,*~,*.pyc
 if has("win16") || has("win32")
@@ -52,7 +58,6 @@ endif
 
 "Always show current position
 set ruler
-
 
 " Height of the command bar
 set cmdheight=3
@@ -103,7 +108,6 @@ set foldcolumn=1
 " => Colors and Fonts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable syntax highlighting
-syntax enable
 
 colorscheme jellybeans
 
@@ -123,6 +127,10 @@ set encoding=utf8
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
 
+" highlight the 81st column
+highlight ColorColumn ctermbg=magenta
+call matchadd('ColorColumn', '\%81v', 255)
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -138,7 +146,7 @@ set tabstop=4
 
 " Linebreak on 500 characters
 set lbr
-set tw=500
+set tw=80
 
 set ai "Auto indent
 set si "Smart indent
@@ -212,7 +220,6 @@ autocmd BufReadPost *
 " Remember info about open buffers on close
 set viminfo^=%
 
-
 """"""""""""""""""""""""""""""
 " => Status line
 """"""""""""""""""""""""""""""
@@ -223,19 +230,24 @@ set laststatus=2
 " set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
 " adds note if there is paste available
 set statusline=\ %{HasPaste()}
+
 " something
 set statusline+=%F%m%r%h
+
 " just adds white space?
 set statusline+=\ %w\ \ 
+
 " the current working directory
 set statusline+=CWD:\ %r%{getcwd()}%h\
 
 " switch over to the right side
 set statusline+=%=
+
 " the current column number and line number
 set statusline+=\ Line:\ %l
 set statusline+=\ TotalLines:\ %L
 set statusline+=\ Column:\ %c
+" set statusline+=\        \
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Editing mappings
@@ -263,6 +275,7 @@ func! DeleteTrailingWS()
   exe "normal `z"
 endfunc
 autocmd BufWrite *.py :call DeleteTrailingWS()
+autocmd BufWrite *.yaml :call DeleteTrailingWS()
 autocmd BufWrite *.coffee :call DeleteTrailingWS()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -300,11 +313,7 @@ map <leader>p :cp<cr>
 " Pressing ,ss will toggle and untoggle spell checking
 map <leader>ss :setlocal spell!<cr>
 
-" Shortcuts using <leader>
-map <leader>sn ]s
-map <leader>sp [s
-map <leader>sa zg
-map <leader>s? z=
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Misc
@@ -313,13 +322,22 @@ map <leader>s? z=
 noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " Quickly open a buffer for scribble
-map <leader>q :e ~/buffer<cr>
+" map <leader>q :e ~/buffer<cr>
 
 " Quickly open a markdown buffer for scribble
-map <leader>x :e ~/buffer.md<cr>
+" map <leader>x :e ~/buffer.md<cr>
 
 " Toggle paste mode on and off
-map <leader>pp :setlocal paste!<cr>
+" map <leader>pp :setlocal paste!<cr>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Show whitespace
+"
+" set listchars=tab:>~,nbsp:_,trail:\uB7
+exec "set listchars=tab:>~,nbsp:_,trail:\u1C59"
+set list
+" hi NonText ctermfg=187
+highlight SpecialKey ctermfg=202
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
@@ -328,7 +346,7 @@ function! CmdLine(str)
     exe "menu Foo.Bar :" . a:str
     emenu Foo.Bar
     unmenu Foo
-endfunction 
+endfunction
 
 function! VisualSelection(direction, extra_filter) range
     let l:saved_reg = @"
@@ -381,29 +399,14 @@ function! <SID>BufcloseCloseIt()
    endif
 endfunction
 
-au BufNewFile,BufRead *.ck set filetype=ck syntax=ck
-au BufNewFile,BufRead *.ino set filetype=ino syntax=ino
-au BufNewFile,BufRead *.json set filetype=json syntax=json
-au BufNewFile,BufRead *.yml set filetype=yaml syntax=yaml
-au BufNewFile,BufRead *.py set filetype=python syntax=python
-
-set runtimepath+=~/.vim_runtime
-set backspace=indent,eol,start
 
 " fuck ESC
 map! jk <Esc>
+
 " enable relative and absolute line numbering
 set relativenumber
 set number
 
-" show whitespace characters
-" set list
-" set listchars=...
-"
-" -------- PYTHON ----------------
-"gets rid of extra whitespaces
-let g:pymode_utls_whitespaces = 1
-au FileType python syn keyword pythonDecorator True None False self
 
 " -------  ARDUINO ---------------
 let g:vim_arduino_auto_open_serial = 1
@@ -431,26 +434,15 @@ elseif has("unix")
     set gfn=Monospace\ 11
 endif
 
-" Open MacVim in fullscreen mode
-if has("gui_macvim")
-    set fuoptions=maxvert,maxhorz
-    au GUIEnter * set fullscreen
-endif
-
 " Disable scrollbars (real hackers don't use scrollbars for navigation!)
 set guioptions-=r
 set guioptions-=R
 set guioptions-=l
 set guioptions-=L
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Fast editing and reloading of vimrc configs
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <leader>e :e! ~/.vim_runtime/my_configs.vim<cr>
-autocmd! bufwritepost vimrc source ~/.vim_runtime/my_configs.vim
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Turn persistent undo on 
+" => Turn persistent undo on
 "    means that you can undo even when you close a buffer/VIM
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 try
@@ -469,7 +461,7 @@ cno $j e ./
 cno $c e <C-\>eCurrentFileDir("e")<cr>
 
 " $q is super useful when browsing on the command line
-" it deletes everything until the last slash 
+" it deletes everything until the last slash
 cno $q <C-\>eDeleteTillSlash()<cr>
 
 " Bash like keys for the command line
@@ -514,7 +506,7 @@ func! DeleteTillSlash()
         else
             let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*/", "\\1", "")
         endif
-    endif   
+    endif
 
     return g:cmd_edited
 endfunc
@@ -522,24 +514,44 @@ endfunc
 func! CurrentFileDir(cmd)
     return a:cmd . " " . expand("%:p:h") . "/"
 endfunc
-""""""""""""""""""""""""""""""
-" => Python section
-""""""""""""""""""""""""""""""
-let python_highlight_all = 1
-" au FileType python syn keyword pythonDecorator True None False self
 
+""""""""""""""""""""""""""""""
+" make and htmljinja section
+""""""""""""""""""""""""""""""
 au BufNewFile,BufRead *.jinja set syntax=htmljinja
 au BufNewFile,BufRead *.mako set ft=mako
 
-au FileType python map <buffer> F :set foldmethod=indent<cr>
+""""""""""""""""""""""""""""""
+" => JSON section
+""""""""""""""""""""""""""""""
+au FileType json map <leader>js :%!python -m json.tool
 
 """"""""""""""""""""""""""""""
+" => Python section
+""""""""""""""""""""""""""""""
+" python syntax plugin
+let python_highlight_all = 1
+
+" syn keyword pythonThis cls self
+" syn match   pythonMember "\(cls\.\|self\.\)\@<=[A-Za-z_]\+\(\.\| \)"
+
+" hi link pythonThis    Comment
+" hi link pythonMember  Function
+
+" allow for one line preview of docstring with folding
+
+let g:SimpylFold_docstring_preview = 1
+" au FileType python map <buffer> F :set foldmethod=indent<cr>
+
 " => YAML Section
 """""""""""""""""""""""""""""""
 au FileType yaml setl shiftwidth=2
 au FileType yaml setl tabstop=2
 au FileType yaml setl cursorcolumn
 au FileType yaml setl cursorline
+au FileType yaml highlight CursorColumn ctermbg=187
+au FileType yaml highlight CursorLine ctermbg=238
+" au FileType yaml setl wrap
 
 """"""""""""""""""""""""""""""
 " => JavaScript section
@@ -549,10 +561,10 @@ au FileType javascript setl fen
 au FileType javascript setl nocindent
 au FileType javascript imap <c-t> $log();<esc>hi
 au FileType javascript imap <c-a> alert();<esc>hi
-au FileType javascript inoremap <buffer> $r return 
+au FileType javascript inoremap <buffer> $r return
 au FileType javascript inoremap <buffer> $f //--- PH ----------------------------------------------<esc>FP2xi
 
-function! JavaScriptFold() 
+function! JavaScriptFold()
     setl foldmethod=syntax
     setl foldlevelstart=1
     syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
@@ -573,6 +585,18 @@ endfunction
 au FileType coffee call CoffeeScriptFold()
 
 au FileType gitcommit call setpos('.', [0, 1, 1, 0])
+
+""""""""""""""""""""""""""""""
+" => vim git-inline-diff section
+"""""""""""""""""""""""""""""""
+" Symbol for lines which have been added, default: +
+let g:git_diff_added_symbol='⇒'
+
+" Symbol for lines which have been removed, default: -
+let g:git_diff_removed_symbol='⇐'
+
+" Symbol for lines which have been changed, default: <>
+let g:git_diff_changed_symbol='⇔'
 
 """"""""""""""""""""""""""""""
 " => bufExplorer plugin
@@ -600,7 +624,7 @@ endif
 
 """"""""""""""""""""""""""""""
 " => CTRL-P
-" plugin for regex on files in directorys 
+" plugin for regex on files in directorys
 " as well as buffers
 " commented out simply because I have
 " not used it in the past
@@ -623,14 +647,14 @@ let g:user_zen_mode='a'
 """"""""""""""""""""""""""""""
 " => snipMate (beside <TAB> support <CTRL-j>)
 """"""""""""""""""""""""""""""
-ino <c-j> <c-r>=snipMate#TriggerSnippet()<cr>
-snor <c-j> <esc>i<right><c-r>=snipMate#TriggerSnippet()<cr>
+" ino <c-j> <c-r>=snipMate#TriggerSnippet()<cr>
+" snor <c-j> <esc>i<right><c-r>=snipMate#TriggerSnippet()<cr>
 
 """"""""""""""""""""""""""""""
 " => Vim grep
 """"""""""""""""""""""""""""""
-"let Grep_Skip_Dirs = 'RCS CVS SCCS .svn generated'
-"set grepprg=/bin/grep\ -nH
+" let Grep_Skip_Dirs = 'RCS CVS SCCS .svn generated'
+" set grepprg=/bin/grep\ -nH
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Nerd Tree
@@ -665,6 +689,16 @@ nnoremap <silent> <leader>z :Goyo<cr>
 " => Syntastic (syntax checker)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:syntastic_python_checkers=['pyflakes']
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => PyFlake8 (pep8 and sytax checker)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:PyFlakeOnWrite = 1
+let g:PyFlakeSigns = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " The rest is for rainbow parentheses
@@ -700,3 +734,4 @@ let g:rbpt_colorpairs = [
 
 let g:rbpt_max = 16
 let g:rbpt_loadcmd_toggle = 0
+
