@@ -10,8 +10,8 @@ filetype indent on
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-au BufNewFile,BufRead *.ck set filetype=ck syntax=ck
-au BufNewFile,BufRead *.ino set filetype=ino syntax=ino
+au BufNewFile,BufRead *.ck set filetype=ck syntax=c
+au BufNewFile,BufRead *.ino set filetype=ino syntax=c
 au BufNewFile,BufRead *.json set filetype=json syntax=json
 au BufNewFile,BufRead *.yml set filetype=yaml syntax=yaml
 au BufNewFile,BufRead *.py set filetype=python syntax=python
@@ -114,12 +114,12 @@ colorscheme jellybeans
 set background=dark
 
 " Set extra options when running in GUI mode
-if has("gui_running")
-    set guioptions-=T
-    set guioptions-=e
-    set t_Co=256
-    set guitablabel=%M\ %t
-endif
+"if has("gui_running")
+"    set guioptions-=T
+"    set guioptions-=e
+"    set t_Co=256
+"    set guitablabel=%M\ %t
+"endif
 
 " Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf8
@@ -132,12 +132,18 @@ highlight ColorColumn ctermbg=magenta
 call matchadd('ColorColumn', '\%81v', 255)
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" TMUX stuff
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" this allows vim to yank text from one file into another tmux window
+set clipboard=unnamed
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Use spaces instead of tabs
 set expandtab
 
-" Be smart when using tabs ;)
+" Be smart when using tabs
 set smarttab
 
 " 1 tab == 4 spaces
@@ -146,7 +152,7 @@ set tabstop=4
 
 " Linebreak on 500 characters
 set lbr
-set tw=80
+set tw=90
 
 set ai "Auto indent
 set si "Smart indent
