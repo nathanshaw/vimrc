@@ -146,8 +146,8 @@ set shiftwidth=4
 set tabstop=4
 
 " Linebreak on 500 characters
-set lbr
-set tw=90
+"set lbr
+"set tw=90
 
 set ai "Auto indent
 set si "Smart indent
@@ -230,7 +230,7 @@ set laststatus=2
 " Format the status line
 " set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
 " adds note if there is paste available
-set statusline=\ %{HasPaste()}
+" set statusline=\ %{HasPaste()}
 
 " something
 set statusline+=%F%m%r%h
