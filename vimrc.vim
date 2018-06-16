@@ -2,10 +2,13 @@
 
 execute pathogen#infect()
 syntax on
-filetype on
 " Enable filetype plugins
-filetype plugin on
-filetype indent on
+filetype plugin indent on
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" LaTeX
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:tex_flavor='latex'
+set sw=2
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
@@ -112,14 +115,6 @@ set foldcolumn=1
 colorscheme jellybeans
 
 set background=dark
-
-" Set extra options when running in GUI mode
-"if has("gui_running")
-"    set guioptions-=T
-"    set guioptions-=e
-"    set t_Co=256
-"    set guitablabel=%M\ %t
-"endif
 
 " Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf8
@@ -292,7 +287,7 @@ autocmd BufWrite *.coffee :call DeleteTrailingWS()
 vnoremap <silent> gv :call VisualSelection('gv', '')<CR>
 
 " Open Ack and put the cursor in the right position
-map <leader>g :Ack 
+map <leader>g :Ack
 
 " When you press <leader>r you can search and replace the selected text
 vnoremap <silent> <leader>r :call VisualSelection('replace', '')<CR>
@@ -319,22 +314,11 @@ map <leader>p :cp<cr>
 " Pressing ,ss will toggle and untoggle spell checking
 map <leader>ss :setlocal spell!<cr>
 
-
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Misc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Remove the Windows ^M - when the encodings gets messed up
 noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
-
-" Quickly open a buffer for scribble
-" map <leader>q :e ~/buffer<cr>
-
-" Quickly open a markdown buffer for scribble
-" map <leader>x :e ~/buffer.md<cr>
-
-" Toggle paste mode on and off
-" map <leader>pp :setlocal paste!<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Show whitespace
@@ -373,15 +357,6 @@ function! VisualSelection(direction, extra_filter) range
 
     let @/ = l:pattern
     let @" = l:saved_reg
-endfunction
-
-
-" Returns true if paste mode is enabled
-function! HasPaste()
-    if &paste
-        return 'PASTE MODE  '
-    en
-    return ''
 endfunction
 
 " Don't close window, when deleting a buffer
@@ -446,7 +421,6 @@ set guioptions-=R
 set guioptions-=l
 set guioptions-=L
 
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Turn persistent undo on
 "    means that you can undo even when you close a buffer/VIM
@@ -478,16 +452,10 @@ cnoremap <C-K>		<C-U>
 cnoremap <C-P> <Up>
 cnoremap <C-N> <Down>
 
-" Map ½ to something useful
-map ½ $
-cmap ½ $
-imap ½ $
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General abbreviations
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 iab xdate <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Omni complete functions
@@ -497,35 +465,9 @@ autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-func! DeleteTillSlash()
-    let g:cmd = getcmdline()
-
-    if has("win16") || has("win32")
-        let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\]\\).*", "\\1", "")
-    else
-        let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*", "\\1", "")
-    endif
-
-    if g:cmd == g:cmd_edited
-        if has("win16") || has("win32")
-            let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\\]\\).*\[\\\\\]", "\\1", "")
-        else
-            let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*/", "\\1", "")
-        endif
-    endif
-
-    return g:cmd_edited
-endfunc
-
 func! CurrentFileDir(cmd)
     return a:cmd . " " . expand("%:p:h") . "/"
 endfunc
-
-""""""""""""""""""""""""""""""
-" make and htmljinja section
-""""""""""""""""""""""""""""""
-au BufNewFile,BufRead *.jinja set syntax=htmljinja
-au BufNewFile,BufRead *.mako set ft=mako
 
 """"""""""""""""""""""""""""""
 " => JSON section
@@ -538,16 +480,8 @@ au FileType json map <leader>js :%!python -m json.tool
 " python syntax plugin
 let python_highlight_all = 1
 
-" syn keyword pythonThis cls self
-" syn match   pythonMember "\(cls\.\|self\.\)\@<=[A-Za-z_]\+\(\.\| \)"
-
-" hi link pythonThis    Comment
-" hi link pythonMember  Function
-
 " allow for one line preview of docstring with folding
-
 let g:SimpylFold_docstring_preview = 1
-" au FileType python map <buffer> F :set foldmethod=indent<cr>
 
 " => YAML Section
 """""""""""""""""""""""""""""""
@@ -557,7 +491,6 @@ au FileType yaml setl cursorcolumn
 au FileType yaml setl cursorline
 au FileType yaml highlight CursorColumn ctermbg=187
 au FileType yaml highlight CursorLine ctermbg=238
-" au FileType yaml setl wrap
 
 """"""""""""""""""""""""""""""
 " => JavaScript section
@@ -582,17 +515,6 @@ function! JavaScriptFold()
 endfunction
 
 """"""""""""""""""""""""""""""
-" => CoffeeScript section
-"""""""""""""""""""""""""""""""
-function! CoffeeScriptFold()
-    setl foldmethod=indent
-    setl foldlevelstart=1
-endfunction
-au FileType coffee call CoffeeScriptFold()
-
-au FileType gitcommit call setpos('.', [0, 1, 1, 0])
-
-""""""""""""""""""""""""""""""
 " => vim git-inline-diff section
 """""""""""""""""""""""""""""""
 " Symbol for lines which have been added, default: +
@@ -605,21 +527,6 @@ let g:git_diff_removed_symbol='⇐'
 let g:git_diff_changed_symbol='⇔'
 
 """"""""""""""""""""""""""""""
-" => bufExplorer plugin
-""""""""""""""""""""""""""""""
-"let g:bufExplorerDefaultHelp=0
-"let g:bufExplorerShowRelativePath=1
-"let g:bufExplorerFindActive=1
-"let g:bufExplorerSortBy='name'
-"map <leader>o :BufExplorer<cr>
-
-""""""""""""""""""""""""""""""
-" => MRU plugin
-""""""""""""""""""""""""""""""
-" let MRU_Max_Entries = 400
-" map <leader>f :MRU<CR>
-
-""""""""""""""""""""""""""""""
 " => YankRing
 """"""""""""""""""""""""""""""
 if has("win16") || has("win32")
@@ -629,38 +536,10 @@ else
 endif
 
 """"""""""""""""""""""""""""""
-" => CTRL-P
-" plugin for regex on files in directorys
-" as well as buffers
-" commented out simply because I have
-" not used it in the past
-""""""""""""""""""""""""""""""
-"let g:ctrlp_working_path_mode = 0
-
-"let g:ctrlp_map = '<c-f>'
-"map <leader>j :CtrlP<cr>
-"map <c-b> :CtrlPBuffer<cr>
-
-"let g:ctrlp_max_height = 20
-"let g:ctrlp_custom_ignore = 'node_modules\|^\.DS_Store\|^\.git\|^\.coffee'
-
-""""""""""""""""""""""""""""""
 " => ZenCoding
 """"""""""""""""""""""""""""""
 " Enable all functions in all modes
 let g:user_zen_mode='a'
-
-""""""""""""""""""""""""""""""
-" => snipMate (beside <TAB> support <CTRL-j>)
-""""""""""""""""""""""""""""""
-" ino <c-j> <c-r>=snipMate#TriggerSnippet()<cr>
-" snor <c-j> <esc>i<right><c-r>=snipMate#TriggerSnippet()<cr>
-
-""""""""""""""""""""""""""""""
-" => Vim grep
-""""""""""""""""""""""""""""""
-" let Grep_Skip_Dirs = 'RCS CVS SCCS .svn generated'
-" set grepprg=/bin/grep\ -nH
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Nerd Tree
@@ -671,11 +550,6 @@ let g:NERDTreeWinSize=35
 map <leader>nn :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark 
 map <leader>nf :NERDTreeFind<cr>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => vim-multiple-cursors
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" let g:multi_cursor_next_key="\<C-s>"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Annotate strings with gettext http://amix.dk/blog/post/19678
