@@ -1,23 +1,22 @@
 "For dealing with pathogen
 
 execute pathogen#infect()
+
 syntax on
+
 " Enable filetype plugins
 filetype plugin indent on
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" LaTeX
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:tex_flavor='latex'
-set sw=2
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 au BufNewFile,BufRead *.ck set filetype=ck syntax=c
-au BufNewFile,BufRead *.ino set filetype=ino syntax=c
+" au BufNewFile,BufRead *.ino set filetype=ino syntax=c
 au BufNewFile,BufRead *.json set filetype=json syntax=json
 au BufNewFile,BufRead *.yml set filetype=yaml syntax=yaml
 au BufNewFile,BufRead *.py set filetype=python syntax=python
+au BufNewFile,BufRead *.xml set filetype=xml syntax=xml
+let g:tex_flavor='latex'
 
 set runtimepath+=~/.custom_vimrc
 
@@ -122,10 +121,6 @@ set encoding=utf8
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
 
-" highlight the 81st column
-highlight ColorColumn ctermbg=magenta
-call matchadd('ColorColumn', '\%81v', 255)
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " TMUX stuff
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -144,10 +139,6 @@ set smarttab
 " 1 tab == 4 spaces
 set shiftwidth=4
 set tabstop=4
-
-" Linebreak on 500 characters
-"set lbr
-"set tw=90
 
 set ai "Auto indent
 set si "Smart indent
@@ -380,7 +371,6 @@ function! <SID>BufcloseCloseIt()
    endif
 endfunction
 
-
 " fuck ESC
 map! jk <Esc>
 
@@ -391,6 +381,10 @@ set number
 
 " -------  ARDUINO ---------------
 let g:vim_arduino_auto_open_serial = 1
+nnoremap <buffer> <leader>av :ArduinoVerify<CR>
+nnoremap <buffer> <leader>au :ArduinoUpload<CR>
+nnoremap <buffer> <leader>ad :ArduinoUploadAndSerial<CR>
+nnoremap <buffer> <leader>ab :ArduinoChooseBoard<CR>
 " by default the vim-arduino plugin i am using
 " has the followin commands:
 "
@@ -469,28 +463,15 @@ func! CurrentFileDir(cmd)
     return a:cmd . " " . expand("%:p:h") . "/"
 endfunc
 
-""""""""""""""""""""""""""""""
-" => JSON section
-""""""""""""""""""""""""""""""
-au FileType json map <leader>js :%!python -m json.tool
-
-""""""""""""""""""""""""""""""
-" => Python section
-""""""""""""""""""""""""""""""
-" python syntax plugin
-let python_highlight_all = 1
-
-" allow for one line preview of docstring with folding
-let g:SimpylFold_docstring_preview = 1
 
 " => YAML Section
 """""""""""""""""""""""""""""""
-au FileType yaml setl shiftwidth=2
-au FileType yaml setl tabstop=2
-au FileType yaml setl cursorcolumn
-au FileType yaml setl cursorline
-au FileType yaml highlight CursorColumn ctermbg=187
-au FileType yaml highlight CursorLine ctermbg=238
+"au FileType yaml setl shiftwidth=2
+"au FileType yaml setl tabstop=2
+"au FileType yaml setl cursorcolumn
+"au FileType yaml setl cursorline
+"au FileType yaml highlight CursorColumn ctermbg=187
+"au FileType yaml highlight CursorLine ctermbg=238
 
 """"""""""""""""""""""""""""""
 " => JavaScript section
@@ -568,17 +549,10 @@ nnoremap <silent> <leader>z :Goyo<cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Syntastic (syntax checker)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:syntastic_python_checkers=['pyflakes']
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => PyFlake8 (pep8 and sytax checker)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:PyFlakeOnWrite = 1
-let g:PyFlakeSigns = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " The rest is for rainbow parentheses
