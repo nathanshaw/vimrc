@@ -16,7 +16,10 @@ au BufNewFile,BufRead *.json set filetype=json syntax=json
 au BufNewFile,BufRead *.yml set filetype=yaml syntax=yaml
 au BufNewFile,BufRead *.py set filetype=python syntax=python
 au BufNewFile,BufRead *.xml set filetype=xml syntax=xml
+
+" LATEX
 let g:tex_flavor='latex'
+let g:Tex_MultipleCompileFormats='pdf,bib,pdf,makeindex,pdf'
 
 set runtimepath+=~/.custom_vimrc
 
@@ -304,6 +307,8 @@ map <leader>p :cp<cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Pressing ,ss will toggle and untoggle spell checking
 map <leader>ss :setlocal spell!<cr>
+" set the spelling to GB english
+set spell spelllang=en_gb
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Misc
@@ -549,10 +554,10 @@ nnoremap <silent> <leader>z :Goyo<cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Syntastic (syntax checker)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+let g:syntastic_check_on_wq = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " The rest is for rainbow parentheses
@@ -578,13 +583,13 @@ let g:rbpt_colorpairs = [
     \ ['darkmagenta', 'DarkOrchid3'],
     \ ['lightgreen',       'firebrick3'],
     \ ['gray',        'RoyalBlue3'],
-    \ ['black',       'SeaGreen3'],
     \ ['darkmagenta', 'DarkOrchid3'],
     \ ['darkblue',    'firebrick3'],
     \ ['darkgreen',   'RoyalBlue3'],
     \ ['darkcyan',    'SeaGreen3'],
     \ ['red',         'firebrick3']
     \ ]
+"\ ['black',       'SeaGreen3'],
 
 let g:rbpt_max = 16
 let g:rbpt_loadcmd_toggle = 0
