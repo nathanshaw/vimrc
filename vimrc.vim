@@ -19,6 +19,7 @@ au BufNewFile,BufRead *.xml set filetype=xml syntax=xml
 
 " LATEX
 let g:tex_flavor='latex'
+let g:Tex_BibtexFlavor = 'biber'
 let g:Tex_MultipleCompileFormats='pdf,bib,pdf,makeindex,pdf'
 
 set runtimepath+=~/.custom_vimrc
@@ -248,7 +249,7 @@ set statusline+=\ Column:\ %c
 " => Editing mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Remap VIM 0 to first non-blank character
-map 0 ^
+map 0  
 
 " Move a line of text using ALT+[jk] or Comamnd+[jk] on mac
 nmap <M-j> mz:m+<cr>`z
@@ -386,10 +387,10 @@ set number
 
 " -------  ARDUINO ---------------
 let g:vim_arduino_auto_open_serial = 1
-nnoremap <buffer> <leader>av :ArduinoVerify<CR>
-nnoremap <buffer> <leader>au :ArduinoUpload<CR>
-nnoremap <buffer> <leader>ad :ArduinoUploadAndSerial<CR>
-nnoremap <buffer> <leader>ab :ArduinoChooseBoard<CR>
+"nnoremap <buffer> <leader>av :ArduinoVerify<CR>
+"nnoremap <buffer> <leader>au :ArduinoUpload<CR>
+"nnoremap <buffer> <leader>ad :ArduinoUploadAndSerial<CR>
+"nnoremap <buffer> <leader>ab :ArduinoChooseBoard<CR>
 " by default the vim-arduino plugin i am using
 " has the followin commands:
 "
