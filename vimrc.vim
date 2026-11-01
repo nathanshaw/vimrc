@@ -1,6 +1,9 @@
 "For dealing with pathogen
 
-execute pathogen#infect()
+set nocompatible
+
+" pathogen is optional: skip quietly if it is not installed
+silent! execute pathogen#infect()
 
 syntax on
 
@@ -40,19 +43,15 @@ nmap <leader>w :w!<cr>
 
 " :W sudo saves the file 
 " (useful for handling the permission-denied error)
-command W w !sudo tee % > /dev/null
+if has("unix")
+  command W w !sudo tee % > /dev/null
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Set 7 lines to the cursor - when moving vertically using j/k
 set so=7
-
-" Avoid garbled characters in Chinese language windows OS
-let $LANG='en' 
-set langmenu=en
-source $VIMRUNTIME/delmenu.vim
-source $VIMRUNTIME/menu.vim
 
 " Ignore compiled files
 set wildignore=*.o,*~,*.pyc
@@ -106,6 +105,8 @@ set noerrorbells
 set novisualbell
 set t_vb=
 set tm=500
+set ttimeout
+set ttimeoutlen=50
 
 " Add a bit extra margin to the left
 set foldcolumn=1
@@ -115,12 +116,16 @@ set foldcolumn=1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable syntax highlighting
 
-colorscheme jellybeans
-
 set background=dark
+try
+  colorscheme jellybeans
+catch
+  colorscheme desert
+endtry
 
 " Set utf8 as standard encoding and en_US as the standard language
-set encoding=utf8
+set encoding=utf-8
+set fileencodings=utf-8,latin1
 
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
@@ -145,7 +150,6 @@ set shiftwidth=4
 set tabstop=4
 
 set ai "Auto indent
-set si "Smart indent
 set wrap "Wrap lines
 
 """"""""""""""""""""""""""""""
@@ -249,7 +253,7 @@ set statusline+=\ Column:\ %c
 " => Editing mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Remap VIM 0 to first non-blank character
-map 0  
+map 0 ^
 
 " Move a line of text using ALT+[jk] or Comamnd+[jk] on mac
 nmap <M-j> mz:m+<cr>`z
@@ -309,7 +313,8 @@ map <leader>p :cp<cr>
 " Pressing ,ss will toggle and untoggle spell checking
 map <leader>ss :setlocal spell!<cr>
 " set the spelling to GB english
-set spell spelllang=en_gb
+set spelllang=en_us
+autocmd FileType markdown,text,gitcommit,tex setlocal spell
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Misc
@@ -426,7 +431,11 @@ set guioptions-=L
 "    means that you can undo even when you close a buffer/VIM
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 try
-    set undodir=~/.custom_vimrc/temp_dirs/undo_dir
+    let s:undo_dir = expand("~/.vim-undo")
+    if !isdirectory(s:undo_dir)
+      call mkdir(s:undo_dir, "p")
+    endif
+    let &undodir = s:undo_dir
     set undofile
 catch
 endtry
@@ -563,15 +572,15 @@ let g:syntastic_check_on_wq = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " The rest is for rainbow parentheses
 " This ensures the feature is toggled on each time we load vim
-au VimEnter * RainbowParenthesesToggle
+au VimEnter * silent! RainbowParenthesesToggle
 " ()
-au Syntax * RainbowParenthesesLoadRound
+au Syntax * silent! RainbowParenthesesLoadRound
 " []
-au Syntax * RainbowParenthesesLoadSquare
+au Syntax * silent! RainbowParenthesesLoadSquare
 " {}
-au Syntax * RainbowParenthesesLoadBraces
+au Syntax * silent! RainbowParenthesesLoadBraces
 " <>
-au Syntax * RainbowParenthesesLoadChevrons
+au Syntax * silent! RainbowParenthesesLoadChevrons
 " Sets the color order for the parentheses (bottom to top)
 let g:rbpt_colorpairs = [
     \ ['red',       'RoyalBlue3'],
